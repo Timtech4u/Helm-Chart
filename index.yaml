@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  helm-app:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2023-03-03T00:41:03.115730881Z"
+    description: A Helm chart for Kubernetes
+    digest: 0987a5271e0e7fe713403650b4ff69e3714e1053826c484458aa13ea67277e74
+    name: helm-app
+    type: application
+    urls:
+    - https://hostspaceng.github.io/helm-charts/helm-app-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-03-03T00:41:03.11469957Z"

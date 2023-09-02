@@ -1,0 +1,19 @@
+nameOverride: "demo"
+fullnameOverride: "demo"
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port: 80
+
+ConfigMap:
+  enabled: true
+  Data:
+    ENV: dev
+    

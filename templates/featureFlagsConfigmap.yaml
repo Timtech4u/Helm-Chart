@@ -1,0 +1,10 @@
+{{- if (.Values.featureFlags.enabled) -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-feature-flags
+data:
+{{- range $key, $value := .Values.featureFlags }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}

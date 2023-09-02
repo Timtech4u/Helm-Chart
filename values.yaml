@@ -1,0 +1,177 @@
+# Default values for my-helm-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 3
+
+deploymentStrategy: RollingUpdate
+
+image:
+  repository: gcr.io/cloudrun/hello
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  command: []
+  args: []
+
+#imagePullSecrets: 
+#  - name: ghcr-secret
+
+nameOverride: ""
+fullnameOverride: ""
+
+envFrom:
+   secretRef:
+      name: secretname
+   configMapRef:
+      name: configmapname
+
+featureFlagsEnv:
+  enabled: false
+  name: feature-flags
+  key: feature-flags.json
+  
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+ConfigMap:
+  enabled: false
+  # configMapKey: configMapValue
+
+featureFlags:
+  enabled: false
+  # feature-flags-json: {"NAME": "john"}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+Secret:
+  enabled: false
+  password: "" # generated randomly if not defined
+
+podSecurityPolicy:
+  create: false
+  name: ""
+  spec:
+    privileged: true
+    fsGroup:
+      rule: RunAsAny
+    runAsUser:
+      rule: RunAsAny
+    seLinux:
+      rule: RunAsAny
+    supplementalGroups:
+      rule: RunAsAny
+    volumes:
+      - secret
+      - configMap
+      - persistentVolumeClaim
+      - emptyDir
+
+service:
+  type: LoadBalancer
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+pvc:
+  enabled: false
+  accessModes: ReadWriteOnce
+  storageClassName: default
+  storage: 1Gi
+  mountPath: "/tmp"
+
+extra_pvc:
+  enabled: false
+  accessModes: ReadWriteOnce
+  storageClassName: default
+  storage: 1Gi
+  mountPath: "/tmp"
+  claimName: extra-pvc
+
+config_volume:
+  enabled: false
+  mountPath: "/tmp"
+  subPath: "nginx.conf"
+  key: "nginx.conf" # ConfigMap Key
+  path: "nginx.conf"
+  configMapName: configmapname
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+readinessProbe:
+  enabled: false
+  httpGet:
+    path: /
+    port: http
+    scheme: HTTP
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 10
+  initialDelaySeconds: 60
+
+livenessProbe:
+  enabled: false
+  httpGet:
+    path: /
+    port: http
+    scheme: HTTP
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 10
+  initialDelaySeconds: 60
+  

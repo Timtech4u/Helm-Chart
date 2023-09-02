@@ -1,0 +1,14 @@
+# dynamically provision volume
+{{- if .Values.extra_pvc.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.extra_pvc.claimName | default (printf "%s-claim" (include "my-helm-chart.fullname" .)) }}
+spec:
+  storageClassName: {{ .Values.extra_pvc.storageClassName }}
+  accessModes:
+    - {{ .Values.extra_pvc.accessModes }}
+  resources:
+    requests:
+      storage: {{ .Values.extra_pvc.storage }}
+{{- end -}}
